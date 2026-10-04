@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5" name="viewport"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  
+  <title>To You ✨ | A Special Message For You</title>
+  <meta name="description" content="A special, heartfelt interactive message crafted just for you 💕 Open with love!"/>
+  
+  <!-- Open Graph / Social Sharing Preview (WhatsApp, Instagram, Telegram) -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="To You ✨ | A Special Message For You"/>
+  <meta property="og:description" content="A special interactive message crafted just for you 💕 Tap to open!"/>
+  <meta property="og:image" content="./assets/hearthappy.gif"/>
+  <meta name="theme-color" content="#ff4d88"/>
+  
+  <!-- Google Fonts for romantic, modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nerko+One&family=Nunito+Sans:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- SweetAlert2 for dreamy dialogs & TypeIt -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+  <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
+
+  <style>
+    :root {
+      --warna-bg: rgba(0, 0, 0, 0.4); 
+      --tombol-teks: #ffffff;
+      --tombol-bingkai: rgba(255, 255, 255, 0.6);
+      --bingkai: 20px;
+      --gaya-font: 'Poppins', 'Nunito Sans', sans-serif;
+      --gaya-font2: 'Caveat', cursive;
+      --gaya-font3: 'Nerko One', cursive;
+      --pink-primary: #ff4d88;
+      --pink-glow: rgba(255, 77, 136, 0.6);
+      --rose-gradient: linear-gradient(135deg, #ff4d88 0%, #ff758c 50%, #ff8da1 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0d0714;
+      font-family: var(--gaya-font);
+      padding: 20px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      position: relative;
+      color: #ffffff;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    /* Watermark styling */
+    body::before {
+      content: "\00A9  Insta | @apurba.css";
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      position: fixed;
+      bottom: 18px;
+      right: 22px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* Background wallpaper with dreamy zoom & breathing effect */
+    #bodyblur {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    #wallpaper {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.05);
+      transition: all 1.8s ease;
+      filter: brightness(0.65) saturate(1.2);
+      animation: gentleZoom 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes gentleZoom {
+      0% { transform: scale(1.05); }
+      100% { transform: scale(1.15); }
+    }
+
+    /* Soft vignette & gradient overlay */
+    #beneranblur {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(255, 77, 136, 0.12) 0%, rgba(13, 7, 20, 0.75) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Music toggle button */
+    .music-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 30px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .music-toggle:hover {
+      transform: translateY(-2px) scale(1.05);
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 6px 20px var(--pink-glow);
+    }
+
+    .music-icon {
+      font-size: 14px;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .music-toggle.playing .music-icon {
+      animation: spinMusic 3s linear infinite;
+    }
+
+    @keyframes spinMusic {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Loading Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(13, 7, 20, 0.95);
+      z-index: 999;
+      transition: opacity 0.5s ease;
+    }
+
+    .loading-spinner {
+      width: 45px;
+      height: 45px;
+      border: 3px solid rgba(255, 77, 136, 0.2);
+      border-top-color: var(--pink-primary);
+      border-radius: 50%;
+      animation: spinSpinner 0.8s linear infinite;
+      margin-bottom: 14px;
+    }
+
+    @keyframes spinSpinner {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-message {
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffe6ee;
+      letter-spacing: 0.5px;
+    }
+
+    /* Main Content Container */
+    #Content {
+      position: relative;
+      opacity: 0;
+      width: 100%;
+      max-width: 480px;
+      margin: 6vh auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: all 0.8s ease;
+      z-index: 5;
+    }
+
+    /* Stickers Container */
+    .kumpulanstiker {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 120px;
+      margin-bottom: 10px;
+    }
+
+    #fotostiker {
+      width: 105px;
+      height: 105px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      padding: 8px;
+      box-shadow: 0 10px 25px rgba(255, 77, 136, 0.35);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: none;
+    }
+
+    #fotostiker:hover {
+      transform: scale(1.1) rotate(4deg);
+      box-shadow: 0 15px 35px rgba(255, 77, 136, 0.5);
+    }
+
+    /* Slide counter indicator */
+    .slide-indicator {
+      display: inline-block;
+      margin-bottom: 15px;
+      padding: 4px 14px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffe6ee;
+      letter-spacing: 0.5px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.4s ease;
+    }
+
+    /* Sliding Message Cards */
+    #pergeseran {
+      position: relative;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      justify-content: flex-start;
+      width: 100%;
+      max-width: 440px;
+      padding: 10px 15px;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    #pergeseran::-webkit-scrollbar {
+      display: none;
+    }
+
+    #pergeseran p {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35), 0 0 25px rgba(255, 105, 180, 0.2);
+      padding: 24px 20px;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.6em;
+      flex-shrink: 0;
+      width: 100%;
+      margin: 0 15px 0 0;
+      scroll-snap-align: center;
+      color: #ffffff;
+      text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8);
+      transition: all 0.4s ease;
+    }
+
+    #pergeseran p b span {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    #pergeseran p b span i.ft {
+      font-family: var(--gaya-font2);
+      font-weight: 700;
+      font-size: 26px;
+      color: #ff94b9;
+      display: inline-block;
+      margin-top: 6px;
+      text-shadow: 0 0 12px rgba(255, 105, 180, 0.7);
+    }
+
+    /* Highlighted User Name */
+    .nama-penerima {
+      display: inline-block;
+      font-family: var(--gaya-font2), cursive;
+      font-size: 32px;
+      font-weight: 700;
+      color: #ff94ba;
+      text-shadow: 0 0 14px rgba(255, 105, 180, 0.85);
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+      animation: pulseName 2s infinite alternate;
+    }
+
+    .highlight-name-inline {
+      font-family: var(--gaya-font2), cursive;
+      font-size: 26px;
+      font-weight: 700;
+      color: #ff94ba;
+      text-shadow: 0 0 10px rgba(255, 105, 180, 0.75);
+    }
+
+    @keyframes pulseName {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.06); }
+    }
+
+    /* Next / Swipe Button */
+    #Tombol {
+      position: relative;
+      opacity: 0;
+      margin-top: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: scale(0.8);
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #Tombol a {
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 30px;
+      outline: none;
+      border: 1.5px solid rgba(255, 255, 255, 0.5);
+      border-radius: 35px;
+      background: var(--rose-gradient);
+      box-shadow: 0 8px 25px rgba(255, 77, 136, 0.45);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      user-select: none;
+    }
+
+    #Tombol a:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 12px 30px rgba(255, 77, 136, 0.65);
+      border-color: #ffffff;
+    }
+
+    #Tombol a:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    /* Start Heart Button */
+    #loveIn {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: heartbeat 1.3s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      14% { transform: scale(1.15); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.2); }
+      70% { transform: scale(1); }
+    }
+
+    .lovein {
+      background: var(--rose-gradient);
+      border-radius: 50%;
+      width: 76px;
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 30px rgba(255, 77, 136, 0.8), 0 0 60px rgba(255, 117, 140, 0.45);
+      border: 3px solid rgba(255, 255, 255, 0.85);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .lovein:hover {
+      transform: scale(1.12);
+      box-shadow: 0 0 40px rgba(255, 77, 136, 1), 0 0 80px rgba(255, 117, 140, 0.7);
+    }
+
+    .lovein svg {
+      width: 42px;
+      height: 42px;
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 2;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+    }
+
+    #ket {
+      text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.9);
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffe6ee;
+      margin-top: 18px;
+      letter-spacing: 0.5px;
+      animation: pulseText 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseText {
+      0% { opacity: 0.75; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1.02); }
+    }
+
+    /* Falling ambient hearts */
+    .heart-icon {
+      position: fixed;
+      top: -10vh;
+      z-index: 1;
+      pointer-events: none;
+      animation: heartMove linear 1;
+    }
+
+    .heart-icon svg {
+      fill: none;
+      stroke: #ff758c;
+      stroke-width: 1.8;
+      filter: drop-shadow(0 0 6px rgba(255, 105, 180, 0.5));
+    }
+
+    @keyframes heartMove {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Burst hearts on click */
+    @keyframes heartBurst {
+      0% { transform: scale(0); opacity: 1; }
+      100% { transform: scale(1.6) translateY(-40px); opacity: 0; }
+    }
+
+    .burst-heart {
+      position: fixed;
+      width: 28px;
+      height: 28px;
+      z-index: 1000;
+      pointer-events: none;
+      animation: heartBurst 0.75s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+
+    /* Interactive click floating emoji */
+    .click-float-heart {
+      position: fixed;
+      font-size: 24px;
+      pointer-events: none;
+      z-index: 999;
+      animation: floatUpFade 1s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+    }
+
+    @keyframes floatUpFade {
+      0% { transform: scale(0.6) translateY(0); opacity: 1; }
+      100% { transform: scale(1.4) translateY(-60px) rotate(15deg); opacity: 0; }
+    }
+
+    /* SweetAlert2 Dreamy Custom Theme */
+    .swal-lovely-modal {
+      background: rgba(18, 10, 24, 0.9) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1.5px solid rgba(255, 150, 190, 0.4) !important;
+      border-radius: 28px !important;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 77, 136, 0.35) !important;
+      padding: 26px 20px !important;
+      color: #ffffff !important;
+      max-width: 360px !important;
+    }
+
+    .swal-lovely-title {
+      font-family: var(--gaya-font) !important;
+      font-size: 21px !important;
+      font-weight: 700 !important;
+      color: #ffffff !important;
+      text-shadow: 0 2px 10px rgba(255, 77, 136, 0.6) !important;
+      margin-bottom: 8px !important;
+    }
+
+    .swal-lovely-input {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: 1.5px solid rgba(255, 150, 190, 0.5) !important;
+      border-radius: 24px !important;
+      color: #ffffff !important;
+      font-size: 16px !important;
+      padding: 12px 18px !important;
+      text-align: center !important;
+      margin: 15px auto !important;
+      width: 85% !important;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+      transition: all 0.3s ease !important;
+    }
+
+    .swal-lovely-input:focus {
+      border-color: var(--pink-primary) !important;
+      box-shadow: 0 0 16px rgba(255, 77, 136, 0.7) !important;
+      outline: none !important;
+      background: rgba(255, 255, 255, 0.16) !important;
+    }
+
+    .swal-lovely-btn {
+      background: var(--rose-gradient) !important;
+      color: #ffffff !important;
+      border: none !important;
+      border-radius: 30px !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      padding: 12px 28px !important;
+      box-shadow: 0 6px 20px rgba(255, 77, 136, 0.5) !important;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+      cursor: pointer !important;
+      margin: 6px !important;
+    }
+
+    .swal-lovely-btn:hover {
+      transform: translateY(-2px) scale(1.05) !important;
+      box-shadow: 0 10px 25px rgba(255, 77, 136, 0.7) !important;
+    }
+
+    .swal-lovely-btn-secondary {
+      background: rgba(255, 255, 255, 0.18) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.4) !important;
+      border-radius: 30px !important;
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      padding: 12px 24px !important;
+      transition: all 0.3s ease !important;
+      cursor: pointer !important;
+      margin: 6px !important;
+    }
+
+    .swal-lovely-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.3) !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .sembunyi {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music Audio Element with automatic CDN fallback -->
+  <audio id="linkmp3" preload="auto" loop class="sembunyi"></audio>
+
+  <!-- Interactive Floating Music Toggle -->
+  <div id="musicBtn" class="music-toggle" onclick="toggleMusic()">
+    <span class="music-icon">🎵</span>
+    <span class="music-text">Music</span>
+  </div>
+
+  <!-- Background Wallpaper and Blur Overlays -->
+  <div id="bodyblur">
+    <img src="./assets/wp.jpg" id="wallpaper" alt="Background Wallpaper"/>
+  </div>
+  <div id="beneranblur"></div>
+
+  <!-- Loading State Overlay -->
+  <div class="overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-message">Preparing something special for you... 💕</div>
+  </div>
+
+  <!-- Main Animated Content Container -->
+  <div id="Content">
+
+    <!-- Reaction Stickers Container -->
+    <div class="kumpulanstiker">
+      <img src="./assets/pusn.gif" id="fotostiker" alt="Cute Sticker"/>
+    </div>
+
+    <!-- Slide progress counter -->
+    <div id="slideCounter" class="slide-indicator">💌 1 / 9</div>
+
+    <!-- Sliding Message Cards -->
+    <div style="width: 100%;">
+      <div id="pergeseran">
+
+        <!-- Message 1: Personalized name replacing the previous API key placeholder -->
+        <p><b>
+          <span><span class="nama-penerima"></span><br>Keep up the spirit<br>through your days.. I am with You always :) 🌤️</span>
+        </b></p>
+
+        <!-- Message 2 -->
+        <p><b>
+          <span>Don't forget to<br>always take care of your health 😍</span>
+        </b></p>
+
+        <!-- Message 3 -->
+        <p><b>
+          <span>I hope today brings you<br>endless reasons to smile ✨</span>
+        </b></p>
+
+        <!-- Message 4 -->
+        <p><b>
+          <span>Oh yeah, I<br>just want to say.. 💭</span>
+        </b></p>
+
+        <!-- Message 5 -->
+        <p><b>
+          <span>If anything ever happens or bothers you,<br>don't forget to tell me, okay? ☺️</span>
+        </b></p>
+
+        <!-- Message 6 -->
+        <p><b>
+          <span>Sorry if I still<br>can't always be the best,<br>but I promise to cherish you always :) 🌸</span>
+        </b></p>
+
+        <!-- Message 7 -->
+        <p><b>
+          <span>I will always<br>try my absolute best for you ✨</span>
+        </b></p>
+
+        <!-- Message 8 -->
+        <p><b>
+          <span>Thank you so much<br>for being my sunshine.. 🌷</span>
+        </b></p>
+
+        <!-- Message 9 -->
+        <p><b>
+          <span>I'm so incredibly lucky<br>to have you, <span class="highlight-name-inline nama-penerima-inline"></span> 🌤️<br><i class="ft">I Love Youuu to the moon and back 💞</i></span>
+        </b></p>
+
+      </div>
+    </div>
+
+    <!-- Next / Swipe / Open Letter Button -->
+    <div id="Tombol">
+      <a onClick="multifungsi()">
+        <b id="tmbl">Swipe &#128073;</b>
+      </a>
+    </div>
+
+    <!-- Initial Touch LOVE Section -->
+    <div id="loveIn" onclick="onLoveClick(event)">
+      <label class="lovein">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </label>
+    </div>
+    <p id="ket">Touch the Heart 💕</p>
+
+  </div>
+
+  <script>
+    // Global State
+    let userName = "Sweetheart";
+    let isMusicPlaying = false;
+    let aktigeser = 0;
+    let thisgeser = 1;
+    let fungsiAwal = 0;
+
+    const audio = document.getElementById("linkmp3");
+    const audioBtn = document.getElementById("musicBtn");
+    const box = document.getElementById("pergeseran");
+    const totalPesan = box.children.length;
+
+    // Curated stickers for each slide from assets folder
+    const stickerList = [
+      "./assets/pusn.gif",          // 1: Cute initial greeting
+      "./assets/hearthappy.gif",    // 2: Care for health
+      "./assets/bunga.gif",         // 3: Giving flowers for good day
+      "./assets/cilukba.gif",       // 4: Peekaboo confession
+      "./assets/ngumpet.gif",       // 5: Shy listening
+      "./assets/pandacoklat.gif",   // 6: Comforting
+      "./assets/0906-peacegoma.gif",// 7: Doing best
+      "./assets/weee.gif",          // 8: Thank you happiness
+      "./assets/mmua.gif"           // 9: Flying kisses / I Love You
+    ];
+
+    // Background Audio setup with reliable CDN fallback
+    const localMusic = "thousand.mp3";
+    const fallbackMusic = "https://assets.mixkit.co/music/preview/mixkit-romantic-moment-heartfelt-melody-676.mp3";
+
+    function initAudio() {
+      audio.src = localMusic;
+      audio.onerror = () => {
+        console.log("Local audio file not found, using romantic CDN melody");
+        audio.src = fallbackMusic;
+        if (isMusicPlaying) {
+          audio.play().catch(e => console.log("Audio play error:", e));
+        }
+      };
+    }
+    initAudio();
+
+    function playMusic() {
+      audio.play().then(() => {
+        isMusicPlaying = true;
+        updateMusicButton();
+      }).catch(() => {
+        // Fallback to CDN source if local fails
+        audio.src = fallbackMusic;
+        audio.play().then(() => {
+          isMusicPlaying = true;
+          updateMusicButton();
+        }).catch(e => console.log("Audio playback prevented:", e));
+      });
+    }
+
+    function toggleMusic() {
+      if (isMusicPlaying) {
+        audio.pause();
+        isMusicPlaying = false;
+      } else {
+        playMusic();
+      }
+      updateMusicButton();
+    }
+
+    function updateMusicButton() {
+      if (!audioBtn) return;
+      if (isMusicPlaying) {
+        audioBtn.classList.add("playing");
+        audioBtn.querySelector(".music-text").textContent = "Pause";
+      } else {
+        audioBtn.classList.remove("playing");
+        audioBtn.querySelector(".music-text").textContent = "Music";
+      }
+    }
+
+    // Dynamic Live Date Watermark
+    (function setWatermarkDate() {
+      const date = new Date();
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const watermarkEl = document.createElement("div");
+      watermarkEl.textContent = `${days[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+      watermarkEl.style = "color:rgba(255,255,255,0.45);font-size:11px;font-weight:500;position:fixed;bottom:18px;left:22px;z-index:10;pointer-events:none;letter-spacing:0.5px;";
+      document.body.appendChild(watermarkEl);
+    })();
+
+    // Page Load Handler
+    window.addEventListener("load", () => {
+      const overlay = document.querySelector(".overlay");
+      overlay.style.opacity = "0";
+      setTimeout(() => overlay.style.display = "none", 500);
+
+      document.getElementById("wallpaper").style.filter = "brightness(0.7) saturate(1.2)";
+      document.getElementById("Content").style.opacity = "1";
+
+      // Start gentle ambient falling hearts
+      setInterval(berjatuhan, 350);
+    });
+
+    // Handle Love Button Click: Prompt for Name
+    async function onLoveClick(e) {
+      if (fungsiAwal !== 0) return;
+      createBurstHearts(e);
+
+      // SweetAlert2 Ask for Name Modal
+      const { value: enteredName } = await Swal.fire({
+        title: "✨ What is your name? ✨",
+        html: `
+          <div style="text-align:center;">
+            <img src="./assets/hearthappy.gif" style="width:75px;height:75px;border-radius:50%;margin-bottom:10px;box-shadow:0 4px 15px rgba(255,77,136,0.4);" />
+            <p style="color:#ffe6ee;font-size:14px;margin-bottom:8px;">Please enter your sweet name so I can share a special message with you 💕</p>
+          </div>
+        `,
+        input: "text",
+        inputPlaceholder: "Enter your lovely name...",
+        confirmButtonText: "Continue with Love 💕",
+        allowOutsideClick: false,
+        customClass: {
+          popup: "swal-lovely-modal",
+          title: "swal-lovely-title",
+          input: "swal-lovely-input",
+          confirmButton: "swal-lovely-btn"
+        },
+        inputValidator: (value) => {
+          if (!value || !value.trim()) {
+            return "Please type a name so I know who this is for! 💖";
+          }
+        }
+      });
+
+      userName = (enteredName || "Sweetheart").trim();
+      
+      // Update all name placeholders across the page
+      document.querySelectorAll(".nama-penerima").forEach(el => el.textContent = userName);
+      document.querySelectorAll(".nama-penerima-inline").forEach(el => el.textContent = userName);
+
+      fungsiAwal = 1;
+      
+      // Transition out the love button and transition into message slideshow
+      document.getElementById("loveIn").style.transition = "all 0.6s ease";
+      document.getElementById("loveIn").style.opacity = "0";
+      document.getElementById("loveIn").style.transform = "scale(0.3)";
+      document.getElementById("ket").style.transition = "all 0.6s ease";
+      document.getElementById("ket").style.opacity = "0";
+
+      playMusic();
+
+      setTimeout(startSlideshow, 400);
+    }
+
+    function startSlideshow() {
+      document.getElementById("loveIn").style.display = "none";
+      document.getElementById("ket").style.display = "none";
+
+      const fotostiker = document.getElementById("fotostiker");
+      fotostiker.src = stickerList[0];
+      fotostiker.style.display = "inline-flex";
+      fotostiker.style.opacity = "1";
+      fotostiker.style.transform = "scale(1)";
+
+      const slideCounter = document.getElementById("slideCounter");
+      slideCounter.style.opacity = "1";
+      slideCounter.style.transform = "scale(1)";
+      updateSlideIndicator(1);
+
+      document.getElementById("pergeseran").style.opacity = "1";
+      document.getElementById("pergeseran").style.transform = "scale(1)";
+
+      setTimeout(() => {
+        document.getElementById("Tombol").style.opacity = "1";
+        document.getElementById("Tombol").style.transform = "scale(1)";
+        aktigeser = 1;
+      }, 300);
+    }
+
+    // Slide Carousel Controller
+    function multifungsi() {
+      if (aktigeser === 1) {
+        if (thisgeser === totalPesan) {
+          aksibalas();
+          return;
+        }
+
+        thisgeser += 1;
+        aktigeser = 0;
+
+        // Smoothly scroll to the next slide
+        const targetSlide = box.children[thisgeser - 1];
+        if (targetSlide) {
+          targetSlide.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        }
+
+        // Change reaction sticker smoothly
+        if (stickerList[thisgeser - 1]) {
+          changeSticker(stickerList[thisgeser - 1]);
+        }
+
+        updateSlideIndicator(thisgeser);
+
+        const tombol = document.getElementById("Tombol");
+        tombol.style.opacity = "0";
+        tombol.style.transform = "scale(0.8)";
+
+        setTimeout(() => {
+          if (thisgeser < totalPesan) {
+            document.getElementById("tmbl").innerHTML = "Swipe &#128073;";
+          } else {
+            document.getElementById("tmbl").innerHTML = "💌 Special Note For You";
+          }
+          tombol.style.opacity = "1";
+          tombol.style.transform = "scale(1)";
+          aktigeser = 1;
+        }, 400);
+      }
+    }
+
+    function updateSlideIndicator(index) {
+      const counter = document.getElementById("slideCounter");
+      if (counter) {
+        counter.textContent = `💌 ${index} / ${totalPesan}`;
+      }
+    }
+
+    function changeSticker(src) {
+      const fotostiker = document.getElementById("fotostiker");
+      fotostiker.style.opacity = "0";
+      fotostiker.style.transform = "scale(0.7) rotate(-10deg)";
+      setTimeout(() => {
+        fotostiker.src = src;
+        fotostiker.style.opacity = "1";
+        fotostiker.style.transform = "scale(1) rotate(0deg)";
+      }, 220);
+    }
+
+    // Final Action: Beautiful In-Site Love Modal (WhatsApp redirect removed!)
+    async function aksibalas() {
+      // Trigger burst celebration of falling hearts
+      for (let i = 0; i < 25; i++) {
+        setTimeout(berjatuhan, i * 70);
+      }
+
+      const result = await Swal.fire({
+        title: `For You, ${userName} ❤️`,
+        html: `
+          <div style="text-align:center; padding:5px 0;">
+            <img src="./assets/ciumin.gif" style="width:110px;height:110px;border-radius:50%;margin-bottom:14px;box-shadow:0 8px 25px rgba(255,75,130,0.5);" />
+            <p style="color:#ffffff;font-size:15px;line-height:1.6em;margin:0 0 8px 0;">
+              Thank you for being in my life and bringing endless warmth into my world ✨
+            </p>
+            <p style="color:#ffe6ee;font-size:14px;line-height:1.5em;margin:0;">
+              Always remember how truly cherished, appreciated, and loved you are! Keep smiling your gorgeous smile 🥰🌸
+            </p>
+          </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Send a Virtual Hug 🤗",
+        cancelButtonText: "Read Again 🔄",
+        allowOutsideClick: false,
+        customClass: {
+          popup: "swal-lovely-modal",
+          title: "swal-lovely-title",
+          confirmButton: "swal-lovely-btn",
+          cancelButton: "swal-lovely-btn-secondary"
+        }
+      });
+
+      if (result.isConfirmed) {
+        // Send a Hug Celebration
+        hugCelebration();
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        // Replay slideshow
+        replayStory();
+      }
+    }
+
+    function hugCelebration() {
+      for (let i = 0; i < 35; i++) {
+        setTimeout(berjatuhan, i * 60);
+      }
+
+      Swal.fire({
+        title: "🤗 Warm Virtual Hug Sent! 💕",
+        html: `
+          <div style="text-align:center;">
+            <img src="./assets/mmua.gif" style="width:100px;height:100px;border-radius:50%;margin-bottom:12px;box-shadow:0 6px 20px rgba(255,75,130,0.4);" />
+            <p style="color:#ffe6ee;font-size:15px;line-height:1.6em;">
+              A great big hug wrapped with infinite warmth, care, and sweet kisses just for you, <b>${userName}</b>! 🌸✨
+            </p>
+          </div>
+        `,
+        confirmButtonText: "Read from Start 🔄",
+        allowOutsideClick: false,
+        customClass: {
+          popup: "swal-lovely-modal",
+          title: "swal-lovely-title",
+          confirmButton: "swal-lovely-btn"
+        }
+      }).then(() => {
+        replayStory();
+      });
+    }
+
+    function replayStory() {
+      thisgeser = 1;
+      aktigeser = 1;
+      changeSticker(stickerList[0]);
+      updateSlideIndicator(1);
+      box.scrollTo({ left: 0, behavior: "smooth" });
+      document.getElementById("tmbl").innerHTML = "Swipe &#128073;";
+      document.getElementById("Tombol").style.opacity = "1";
+      document.getElementById("Tombol").style.transform = "scale(1)";
+    }
+
+    // Ambient Falling Hearts Animation
+    function berjatuhan() {
+      const heart = document.createElement("div");
+      heart.className = "heart-icon";
+      heart.innerHTML = `
+        <svg style="width: 24px; height: 24px;" viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      `;
+      heart.style.left = (Math.random() * 92 + 4) + "vw";
+      heart.style.animationDuration = (Math.random() * 2.5 + 2.5) + "s";
+      heart.style.opacity = (Math.random() * 0.4 + 0.3).toString();
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 5500);
+    }
+
+    // Burst Hearts upon clicking the Love heart
+    function createBurstHearts(e) {
+      const clientX = e.clientX || window.innerWidth / 2;
+      const clientY = e.clientY || window.innerHeight / 2;
+      for (let i = 0; i < 18; i++) {
+        const heart = document.createElement("div");
+        heart.className = "burst-heart";
+        heart.innerHTML = `
+          <svg style="width: 26px; height: 26px; fill:#ff4d88;" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        `;
+        heart.style.left = (clientX + (Math.random() * 80 - 40)) + "px";
+        heart.style.top = (clientY + (Math.random() * 80 - 40)) + "px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 750);
+      }
+    }
+
+    // Click anywhere to spawn floating love sparks
+    document.addEventListener("click", (e) => {
+      if (e.target.closest(".swal2-container") || e.target.closest("#musicBtn") || e.target.closest("#Tombol") || e.target.closest("#loveIn")) {
+        return;
+      }
+      createClickSparkle(e.clientX, e.clientY);
+    });
+
+    function createClickSparkle(x, y) {
+      const heart = document.createElement("div");
+      heart.className = "click-float-heart";
+      const emojis = ["💖", "💕", "✨", "🌸", "💗", "❤️", "🥰"];
+      heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      heart.style.left = (x - 12) + "px";
+      heart.style.top = (y - 12) + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1000);
+    }
+  </script>
+</body>
+</html>
